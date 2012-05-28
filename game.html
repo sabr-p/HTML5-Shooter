@@ -1,0 +1,73 @@
+<html>
+<head>
+
+<style>
+body{
+	cursor:none;
+	overflow:hidden;
+}
+#mob{
+	position:absolute;
+	left:200px;
+	top:200px;
+	-webkit-transform:rotate(0deg);
+	-webkit-transform-origin:10px 100px;
+}
+#cursor{
+	position:absolute;
+	-webkit-transform-origin:50% 50%;
+}
+
+#stage{
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+
+#scopeOverlay{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background:black;
+	visibility:hidden;
+}
+
+.reloadBar{
+	position:absolute;
+	background:black;
+	top:0px;
+	left:0;
+	width:100%;
+}
+
+.reloadText{
+	font-family:sans-serif;
+	font-weight:bold;
+	font-size:100px;
+	opacity:0.5;
+	color:#777;
+	text-shadow: 10px 10px 10px #AAA;
+	position:absolute;
+	right:0px;
+	bottom:0px;
+}
+</style>
+
+
+
+<script src="./game.js" type="text/javascript"></script>
+
+</head>
+<body oncontextmenu="return false;">
+
+
+
+<div id="mob" ><canvas id="mobCanv" height="200" width="200"></canvas></div>
+<div id="scopeOverlay"></div>
+<div id="cursor"><canvas id="cursorCanv" height="20" width="20"></canvas></div>
+<canvas id="stage" width="100%" height="100%"></canvas>
+
+</body>
+</html>

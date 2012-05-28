@@ -37,7 +37,10 @@ progBar = null,
 progText = null,
 
 //Array of targets currently on screen
-targets = [];
+targets = [],
+
+//Array of all GET variables
+GETvars = [];
 
 //Simple function to convert degrees to radians.
 Math.degToRad = function (degs) {
@@ -306,9 +309,17 @@ function shoot(e) {
 	mobX = Number(mobX.substring(0, mobX.length - 2));
 	mobY = Number(mobY.substring(0, mobY.length - 2));
 	
+	var difficulty;
+	if(searchGETvars("difficulty")!=false)
+	{
+		difficulty=(Number(searchGETvars("difficulty"))/10);
+	}else{
+		difficulty=0.5;
+	}
+	
 	//Get the distance from the player and the intended target and get 1/10 of it
 	var multiplier = Math.sqrt(((randX - mobX) * (randX - mobX)) + ((randY - mobY) * (randY - mobY)));
-	multiplier *= 1 / 10;
+	multiplier *= 1 / (10/difficulty);
 	
 	//If the player is not using the scope, reduce the accuracy with the multiplier.
 	if (!isScoping) {
@@ -326,6 +337,20 @@ function shoot(e) {
 			randY += Math.floor(Math.random() * multiplier);
 		}
 		
+	}else{
+		multiplier *= 1 / (10/difficulty);
+		if (Math.round(Math.random()) == 1) {
+			randX -= Math.floor(Math.random() * multiplier);
+		} else {
+			randX += Math.floor(Math.random() * multiplier);
+		}
+		
+		//Merely for randomization
+		if (Math.round(Math.random()) == 1) {
+			randY -= Math.floor(Math.random() * multiplier);
+		} else {
+			randY += Math.floor(Math.random() * multiplier);
+		}
 	}
 	
 	//Draw the shot
@@ -346,13 +371,32 @@ function shoot(e) {
 	addProgress();
 }
 
+function searchGETvars(varName) {
+	for (var i = 0; i < GETvars.length; i++) {
+		if (GETvars[i].name == varName) {
+			return GETvars[i].value;
+		}
+		
+	}
+	return false;
+}
+
 //Creates 5 targets and randomly places them around the screen.
 function createTargets() {
 	var ctx = stage.getContext('2d'),
-	i;
-	for (i = 0; i < 5; i++) {
+	i,
+	numOfTargs;
+	
+	if(searchGETvars("targets")!=false)
+	{
+		numOfTargs = searchGETvars("targets");
+	}else{
+		numOfTargs = 5;
+	}
+	
+	for (i = 0; i < numOfTargs; i++) {
 		var xToPush = Math.floor(Math.random() * (window.innerWidth - 10));
-		var yToPush = 100 + Math.floor(Math.random() * (window.innerHeight - 10));
+		var yToPush = 100 + Math.floor(Math.random() * (window.innerHeight - 110));
 		targets.push({
 			x : xToPush,
 			y : yToPush,
@@ -362,6 +406,27 @@ function createTargets() {
 		ctx.fillStyle = "black";
 		ctx.fillRect(xToPush, yToPush, 10, 10);
 	}
+}
+
+function parseGET() {
+	var GET = document.location.href,
+	i;
+	
+	if (GET.indexOf("?") < 0) {
+		return false;
+	}
+	
+	GET = GET.substring(GET.indexOf("?") + 1, GET.length);
+	GET = GET.split("&");
+	
+	for (i = 0; i < GET.length; i++) {
+		var holder = GET[i].split("=");
+		GETvars.push({
+			name : holder[0],
+			value : holder[1]
+		});
+	}
+	return true;
 }
 
 //Called when the window has finished loading
@@ -385,6 +450,8 @@ window.onload = function () {
 	
 	cursor = document.getElementById('cursor');
 	cursorCanv = document.getElementById('cursorCanv');
+	
+	parseGET();
 	
 	//Create targets, draw the player and begin the main loop.
 	createTargets();
