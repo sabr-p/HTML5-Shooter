@@ -147,7 +147,7 @@ function keyIsUp(e) {
 	isKeyDown = false;
 	
 	//Removes all keys with the same keyCode from the keyDown array
-	while (keyDown.indexOf(e.keyCode) > 0) {
+	while (keyDown.indexOf(e.keyCode) >= 0) {
 		keyDown.splice(keyDown.indexOf(e.keyCode), 1);
 	}
 }
