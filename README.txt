@@ -1,5 +1,7 @@
 HTML5-Shooter is a simple shooter game to test out the new features in HTML5 and CSS3.
 
+Play Online: http://naresh97.github.com/HTML5-Shooter
+
 Update: Moved the game to game.html and game.js. index.html is now a launcher for the game with settings for the user.
 
 Note: This game is only tested on Google Chrome!!!
